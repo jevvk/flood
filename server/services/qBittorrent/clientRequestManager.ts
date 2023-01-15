@@ -477,13 +477,16 @@ class ClientRequestManager {
   }
 
   async torrentsRemoveTags(hashes: Array<string>, tags?: Array<string>): Promise<void> {
+    let params = new URLSearchParams({ hashes: hashes.join('|').toLowerCase() });
+    
+    if (tags) {
+      params.set('tags', tags?.join(','));
+    }
+    
     return axios
       .post(
         `${this.apiBase}/torrents/removeTags`,
-        new URLSearchParams({
-          hashes: hashes.join('|').toLowerCase(),
-          tags: tags?.join(','),
-        }),
+        params,
         {
           headers: await this.getRequestHeaders(),
         },

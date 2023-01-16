@@ -15,7 +15,7 @@ export const fetchUrls = async (
     inputUrls.map(async (url) => {
       if (url.startsWith('http:') || url.startsWith('https:')) {
         const domain = url.split('/')[2];
-        const headers = { 'Accept-Encoding': 'gzip, deflate' };
+        const headers: any = { 'Accept-Encoding': 'gzip, deflate' };
         
         if (cookies?.[domain]) {
           headers['Cookie'] = cookies[domain].join('; ').concat(';');

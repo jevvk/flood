@@ -15,16 +15,18 @@ export const fetchUrls = async (
     inputUrls.map(async (url) => {
       if (url.startsWith('http:') || url.startsWith('https:')) {
         const domain = url.split('/')[2];
+        const headers = { 'Accept-Encoding': 'gzip, deflate' };
+        
+        if (cookies?.[domain]) {
+          headers['Cookie'] = cookies[domain].join('; ').concat(';');
+        }
 
         const file = await axios({
           method: 'GET',
           url,
           responseType: 'arraybuffer',
-          headers: cookies?.[domain]
-            ? {
-                Cookie: cookies[domain].join('; ').concat(';'),
-              }
-            : undefined,
+          decompress: true,
+          headers: headers
         }).then(
           (res) => res.data,
           (e: AxiosError) => console.error(e),
